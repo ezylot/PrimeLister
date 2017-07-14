@@ -26,9 +26,8 @@ public class WorkSheduler {
         long milliseconds = ((System.currentTimeMillis()-startTime+1));
 
         double pps = ((double)primes.size() / (double)milliseconds) * 1000.0 ;
-        String message = String.format("%30s - last prime found after: %2dh %2dm %2ds WITH a pps of %f", prime.toString(), milliseconds/3600, (milliseconds%3600)/60, milliseconds%60, pps);
 
-        bufferedPrinter.addMessage(message);
+        bufferedPrinter.addMessage(new PrimeMessage(milliseconds/1000, prime.toString(), pps));
 
     }
 

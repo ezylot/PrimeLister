@@ -6,16 +6,16 @@ public class BufferedPrinter implements Runnable {
     private final Object lock = new Object();
     private final Object lock2 = new Object();
 
-    private Deque<String> messages = new ArrayDeque<>();
+    private Deque<PrimeMessage> messages = new ArrayDeque<>();
     private long lineCounter = 1;
 
-    private String getMessage() {
+    private PrimeMessage getMessage() {
         synchronized (lock) {
             return messages.removeFirst();
         }
     }
 
-    public void addMessage(String message) {
+    public void addMessage(PrimeMessage message) {
         synchronized (lock) {
             messages.addLast(message);
         }
@@ -48,7 +48,7 @@ public class BufferedPrinter implements Runnable {
             }
 
             synchronized (lock) {
-                message = this.getMessage();
+                message = this.getMessage().toString();
                 numberInQueue = this.getMessageCounter();
             }
 
