@@ -42,7 +42,10 @@ public class BufferedPrinter implements Runnable {
 
     @Override
     public void run() {
-        String message;
+
+        out.printf("%10s: %15s%n", "n-th prime", "primes in queue");
+
+        PrimeMessage message;
         int numberInQueue;
         while(true) {
             if(Thread.currentThread().isInterrupted()) {
@@ -62,11 +65,13 @@ public class BufferedPrinter implements Runnable {
             }
 
             synchronized (lock) {
-                message = this.getMessage().toString();
+                message = this.getMessage();
                 numberInQueue = this.getMessageCounter();
             }
 
-            out.printf("\r%10d: %5d: %s", lineCounter, numberInQueue, message);
+            if(lineCounter % 1_000 == 0) {
+                out.printf("\r%10d: %15d: %s", lineCounter, numberInQueue, message.toString());
+            }
 
             if(lineCounter % 100_000 == 0) {
                 out.printf("%n");

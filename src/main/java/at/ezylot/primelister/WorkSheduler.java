@@ -1,5 +1,8 @@
 package at.ezylot.primelister;
 
+import at.ezylot.primelister.primechecker.BigIntegerPrimeChecker;
+import at.ezylot.primelister.primechecker.LongPrimeChecker;
+import at.ezylot.primelister.primechecker.PrimeChecker;
 import org.springframework.util.Assert;
 
 import java.math.BigInteger;
@@ -13,13 +16,12 @@ public class WorkSheduler {
 
     long startTime = 0;
 
-    private List<NumberChecker> workers = new ArrayList<>();
+    private List<PrimeChecker> workers = new ArrayList<>();
     private ExecutorService executerService;
 
     BufferedPrinter bufferedPrinter = new BufferedPrinter(System.out);
 
     private Set<BigInteger> primes = new HashSet<>();
-    private Map<BigInteger, LocalDateTime> currentlyWorkingOn = new HashMap<>();
     private BigInteger lastChecked = BigInteger.valueOf(3);
 
     public WorkSheduler(int threads) {
@@ -27,14 +29,15 @@ public class WorkSheduler {
         executerService = Executors.newFixedThreadPool(threads);
 
         for (int i = 0; i < threads; i++) {
-            NumberChecker checker = new NumberChecker(this);
+            // Can be replaced with 'BigIntegerPrimeChecker'
+            PrimeChecker checker = new LongPrimeChecker(this);
             workers.add(checker);
         }
     }
 
     public void startBlocking() throws InterruptedException {
         startTime = System.currentTimeMillis();
-        for (NumberChecker checker: workers) {
+        for (PrimeChecker checker: workers) {
             executerService.submit(checker);
         }
 
@@ -47,26 +50,21 @@ public class WorkSheduler {
 
     public synchronized void isPrime(BigInteger prime) {
         primes.add(prime);
-        currentlyWorkingOn.remove(prime);
 
         long milliseconds = System.currentTimeMillis() - startTime + 1;
         assert milliseconds > 0;
 
-        double pps = ((double)primes.size() / (double)milliseconds) * 1000.0 ;
-        assert pps > 0;
-
-        bufferedPrinter.addMessage(new PrimeMessage(milliseconds/1000, prime.toString(), pps));
+        bufferedPrinter.addMessage(new PrimeMessage(
+                prime.toString(),
+                primes.size(),
+                milliseconds
+        ));
 
     }
 
     public synchronized Set<BigInteger> getPrimes() {
         return primes;
     }
-
-    public synchronized void isNonPrime(BigInteger nonPrime) {
-        currentlyWorkingOn.remove(nonPrime);
-    }
-
 
     public synchronized BigInteger getNumberToWorkOn() {
         lastChecked = lastChecked.add(BigInteger.valueOf(2));

@@ -1,24 +1,27 @@
 package at.ezylot.primelister;
 
 public class PrimeMessage {
-    private final long seconds;
+    private final long millis;
     private final String primeNumber;
-    private final double pps;
+    private final long counter;
 
-    public PrimeMessage(long seconds, String primeNumber, double pps) {
-        this.seconds = seconds;
+    public PrimeMessage(String primeNumber, long alreadyFound, long millis) {
+        this.millis = millis;
         this.primeNumber = primeNumber;
-        this.pps = pps;
+        this.counter = alreadyFound;
     }
 
     @Override
     public String toString() {
-         return String.format("%30s - last prime found after: %2dh %2dm %2ds WITH a pps of %f",
-             primeNumber,
-             seconds/3600,
-             (seconds%3600)/60,
-             seconds%60,
-             pps
-         );
+        double pps = ((double)counter / (double)millis) * 1000.0 ;
+        long seconds = millis / 1000;
+
+        return String.format("%30s - last prime found after: %2dh %2dm %2ds WITH a pps of %f",
+            primeNumber,
+            seconds/3600,
+            (seconds%3600)/60,
+            seconds%60,
+            pps
+        );
     }
 }

@@ -1,8 +1,10 @@
-package at.ezylot.primelister;
+package at.ezylot.primelister.primechecker;
+
+import at.ezylot.primelister.WorkSheduler;
 
 import java.math.BigInteger;
 
-public class NumberChecker implements Runnable {
+public class BigIntegerPrimeChecker implements PrimeChecker {
 
     private final WorkSheduler sheduler;
     private static final BigInteger TWO = BigInteger.valueOf(2);
@@ -10,7 +12,7 @@ public class NumberChecker implements Runnable {
 
 
 
-    public NumberChecker(WorkSheduler sheduler) {
+    public BigIntegerPrimeChecker(WorkSheduler sheduler) {
         this.sheduler = sheduler;
     }
 
@@ -30,14 +32,12 @@ public class NumberChecker implements Runnable {
             found = false;
 
             if(number.remainder(TWO).equals(BigInteger.ZERO)) {
-                sheduler.isNonPrime(number);
                 found = true;
             }
 
 
             for (BigInteger check = THREE; check.compareTo(squareRoot) <= 0; check = check.add(TWO)) {
                 if(number.remainder(check).equals(BigInteger.ZERO)) {
-                    sheduler.isNonPrime(number);
                     found = true;
                     break;
                 }
