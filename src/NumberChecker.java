@@ -20,7 +20,12 @@ public class NumberChecker implements Runnable {
             BigInteger squareRoot = sqrt(number);
             Boolean found = false;
 
-            for (BigInteger check = BigInteger.valueOf(2); !found && check.compareTo(squareRoot) <= 0; check = check.add(BigInteger.ONE)) {
+            if(number.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
+                sheduler.isNonPrime(number);
+                found = true;
+            }
+
+            for (BigInteger check = BigInteger.valueOf(3); !found && check.compareTo(squareRoot) <= 0; check = check.add(BigInteger.valueOf(2))) {
                 if(number.mod(check).equals(BigInteger.ZERO)) {
                     sheduler.isNonPrime(number);
                     found = true;
