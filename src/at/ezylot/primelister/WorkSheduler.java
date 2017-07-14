@@ -1,3 +1,5 @@
+package at.ezylot.primelister;
+
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,7 +18,7 @@ public class WorkSheduler {
 
     private Set<BigInteger> primes = new HashSet<>();
     private Map<BigInteger, LocalDateTime> currentlyWorkingOn = new HashMap<>();
-    private BigInteger nextToCheck = BigInteger.valueOf(3);
+    private BigInteger lastChecked = BigInteger.valueOf(3);
 
 
     public synchronized void isPrime(BigInteger prime) {
@@ -41,8 +43,8 @@ public class WorkSheduler {
 
 
     public synchronized BigInteger getNumberToWorkOn() {
-        nextToCheck = nextToCheck.add(BigInteger.valueOf(2));
-        return nextToCheck;
+        lastChecked = lastChecked.add(BigInteger.valueOf(2));
+        return lastChecked;
     }
 
     public WorkSheduler(Integer threads) {
@@ -61,6 +63,8 @@ public class WorkSheduler {
         }
 
         Executors.newSingleThreadExecutor().submit(bufferedPrinter);
+        this.isPrime(BigInteger.valueOf(2));
+        this.isPrime(BigInteger.valueOf(3));
         executerService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
     }
 

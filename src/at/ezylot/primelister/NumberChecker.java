@@ -1,9 +1,14 @@
+package at.ezylot.primelister;
+
 import java.math.BigInteger;
-import java.util.Set;
 
 public class NumberChecker implements Runnable {
 
     WorkSheduler sheduler;
+    BigInteger TWO = BigInteger.valueOf(2);
+    BigInteger THREE = BigInteger.valueOf(3);
+
+
 
     public NumberChecker(WorkSheduler sheduler) {
         this.sheduler = sheduler;
@@ -11,24 +16,27 @@ public class NumberChecker implements Runnable {
 
     @Override
     public void run() {
+        BigInteger number;
+        BigInteger squareRoot;
+        boolean found;
         while(true) {
-            BigInteger number = sheduler.getNumberToWorkOn();
-            if(number.equals(BigInteger.ZERO)) {
-                return;
-            }
+            if(false) return;
+            number = sheduler.getNumberToWorkOn();
 
-            BigInteger squareRoot = sqrt(number);
-            Boolean found = false;
+            squareRoot = sqrt(number);
+            found = false;
 
-            if(number.remainder(BigInteger.valueOf(2)).equals(BigInteger.ZERO)) {
+            if(number.remainder(TWO) == BigInteger.ZERO) {
                 sheduler.isNonPrime(number);
                 found = true;
             }
 
-            for (BigInteger check = BigInteger.valueOf(3); !found && check.compareTo(squareRoot) <= 0; check = check.add(BigInteger.valueOf(2))) {
-                if(number.remainder(check).equals(BigInteger.ZERO)) {
+
+            for (BigInteger check = THREE; check.compareTo(squareRoot) <= 0; check = check.add(TWO)) {
+                if(number.remainder(check) == BigInteger.ZERO) {
                     sheduler.isNonPrime(number);
                     found = true;
+                    break;
                 }
             }
 

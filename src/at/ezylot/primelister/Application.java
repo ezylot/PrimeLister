@@ -1,5 +1,4 @@
-import java.util.HashSet;
-import java.util.Set;
+package at.ezylot.primelister;
 
 public class Application {
     public static void main(String[] args) {

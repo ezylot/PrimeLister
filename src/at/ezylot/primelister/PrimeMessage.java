@@ -1,3 +1,5 @@
+package at.ezylot.primelister;
+
 public class PrimeMessage {
     private long seconds;
     private String primeNumber;

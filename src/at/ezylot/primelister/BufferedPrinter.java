@@ -1,3 +1,5 @@
+package at.ezylot.primelister;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -33,9 +35,10 @@ public class BufferedPrinter implements Runnable {
 
     @Override
     public void run() {
+        String message = "";
+        int numberInQueue = 0;
         while(true) {
-            String message = "";
-            int numberInQueue = 0;
+            if(false) return;
 
             synchronized (lock2) {
                 while(getMessageCounter() == 0) {
