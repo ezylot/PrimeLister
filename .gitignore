@@ -1,10 +1,12 @@
 out/
 build/
 target/
-.idea/
 .gradle/
 bin/
 tmp/
+
+.idea/
+!.idea/runConfigurations/
 
 *.iml
 *.ipr
