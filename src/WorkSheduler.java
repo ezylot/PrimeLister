@@ -23,10 +23,10 @@ public class WorkSheduler {
         primes.add(prime);
         currentlyWorkingOn.remove(prime);
 
-        long seconds = ((System.currentTimeMillis()-startTime+1)/1000);
+        long milliseconds = ((System.currentTimeMillis()-startTime+1));
 
-        double pps = (double)primes.size() / (double)seconds ;
-        String message = String.format("%30s - last prime found after: %2dh %2dm %2ds WITH a pps of %f", prime.toString(), seconds/3600, (seconds%3600)/60, seconds%60, pps);
+        double pps = ((double)primes.size() / (double)milliseconds) * 1000.0 ;
+        String message = String.format("%30s - last prime found after: %2dh %2dm %2ds WITH a pps of %f", prime.toString(), milliseconds/3600, (milliseconds%3600)/60, milliseconds%60, pps);
 
         bufferedPrinter.addMessage(message);
 
