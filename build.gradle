@@ -1,0 +1,24 @@
+plugins {
+  id "org.sonarqube" version "2.5"
+  id "java"
+  id "jacoco"
+  id "application"
+}
+
+repositories {
+  repositories {
+    maven {
+      url "http://repo1.maven.org/maven2/"
+    }
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+}
+
+mainClassName = "at.ezylot.primelister.Application"
+
+dependencies {
+  compile 'org.springframework:spring-core:4.3.9.RELEASE'
+  testCompile 'junit:junit:4.12'
+}

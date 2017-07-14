@@ -4,9 +4,9 @@ import java.math.BigInteger;
 
 public class NumberChecker implements Runnable {
 
-    WorkSheduler sheduler;
-    BigInteger TWO = BigInteger.valueOf(2);
-    BigInteger THREE = BigInteger.valueOf(3);
+    private final WorkSheduler sheduler;
+    private static final BigInteger TWO = BigInteger.valueOf(2);
+    private static final BigInteger THREE = BigInteger.valueOf(3);
 
 
 
@@ -20,20 +20,23 @@ public class NumberChecker implements Runnable {
         BigInteger squareRoot;
         boolean found;
         while(true) {
-            if(false) return;
+            if(Thread.currentThread().isInterrupted()) {
+                return;
+            }
+
             number = sheduler.getNumberToWorkOn();
 
             squareRoot = sqrt(number);
             found = false;
 
-            if(number.remainder(TWO) == BigInteger.ZERO) {
+            if(number.remainder(TWO).equals(BigInteger.ZERO)) {
                 sheduler.isNonPrime(number);
                 found = true;
             }
 
 
             for (BigInteger check = THREE; check.compareTo(squareRoot) <= 0; check = check.add(TWO)) {
-                if(number.remainder(check) == BigInteger.ZERO) {
+                if(number.remainder(check).equals(BigInteger.ZERO)) {
                     sheduler.isNonPrime(number);
                     found = true;
                     break;
