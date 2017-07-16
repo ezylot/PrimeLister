@@ -1,50 +1,59 @@
 package at.ezylot.primelister;
 
-import at.ezylot.primelister.primechecker.BigIntegerPrimeChecker;
 import at.ezylot.primelister.primechecker.LongPrimeChecker;
 import at.ezylot.primelister.primechecker.PrimeChecker;
-import org.springframework.util.Assert;
+import com.google.common.base.MoreObjects;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class WorkSheduler {
 
-    long startTime = 0;
+    private long startTime = 0;
+    private Integer threads = null;
 
     private List<PrimeChecker> workers = new ArrayList<>();
-    private ExecutorService executerService;
-
-    BufferedPrinter bufferedPrinter = new BufferedPrinter(System.out);
+    private BufferedPrinter bufferedPrinter;
 
     private Set<BigInteger> primes = new HashSet<>();
     private BigInteger lastChecked = BigInteger.valueOf(3);
 
     public WorkSheduler(int threads) {
-        Assert.isTrue(threads > 0, "Can not use 0 or less threads");
-        executerService = Executors.newFixedThreadPool(threads);
-
-        for (int i = 0; i < threads; i++) {
-            // Can be replaced with 'BigIntegerPrimeChecker'
-            PrimeChecker checker = new LongPrimeChecker(this);
-            workers.add(checker);
-        }
+        this.threads = threads;
     }
 
+    @Autowired
+    protected void setBufferedPrinter(BufferedPrinter bufferedPrinter) {
+        this.bufferedPrinter = bufferedPrinter;
+    }
+
+
     public void startBlocking() throws InterruptedException {
+        int thr = MoreObjects.firstNonNull(this.threads, Runtime.getRuntime().availableProcessors());
+        ExecutorService workerExecutor = Executors.newFixedThreadPool(thr);
+
+        for (int i = 0; i < thr; i++) {
+            // Can be replaced with 'BigIntegerPrimeChecker'
+            PrimeChecker checker = new LongPrimeChecker(this);
+            this.workers.add(checker);
+        }
+
         startTime = System.currentTimeMillis();
-        for (PrimeChecker checker: workers) {
-            executerService.submit(checker);
+        for (PrimeChecker checker: this.workers) {
+            workerExecutor.submit(checker);
         }
 
         Executors.newSingleThreadExecutor().submit(bufferedPrinter);
         this.isPrime(BigInteger.valueOf(2));
         this.isPrime(BigInteger.valueOf(3));
-        executerService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+        workerExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
     }
 
 
@@ -55,11 +64,10 @@ public class WorkSheduler {
         assert milliseconds > 0;
 
         bufferedPrinter.addMessage(new PrimeMessage(
-                prime.toString(),
-                primes.size(),
-                milliseconds
+            prime.toString(),
+            primes.size(),
+            milliseconds
         ));
-
     }
 
     public synchronized Set<BigInteger> getPrimes() {
@@ -71,8 +79,8 @@ public class WorkSheduler {
         return lastChecked;
     }
 
-    public int getAmountOfWorkers(){
-        return workers.size();
+    public int getThreadCount(){
+        return MoreObjects.firstNonNull(this.threads, Runtime.getRuntime().availableProcessors());
     }
 
 

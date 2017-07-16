@@ -37,6 +37,9 @@ public class LongPrimeChecker implements PrimeChecker {
             }
 
             long number = sheduler.getNumberToWorkOn().longValue();
+            if(number == -1) {
+                return;
+            }
             if(checkPrime(number)) {
                 sheduler.isPrime(BigInteger.valueOf(number));
             }

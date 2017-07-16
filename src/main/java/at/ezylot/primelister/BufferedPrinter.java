@@ -13,10 +13,15 @@ public class BufferedPrinter implements Runnable {
     private final Object lock2 = new Object();
 
     private Deque<PrimeMessage> messages = new ArrayDeque<>();
-    private long lineCounter = 1;
+
+    private boolean skipPrint = true;
 
     public BufferedPrinter(OutputStream out) {
         this.out = new PrintStream(out);
+    }
+
+    public void setSkipPrint(boolean enabled) {
+        this.skipPrint = enabled;
     }
 
     private PrimeMessage getMessage() {
@@ -34,6 +39,8 @@ public class BufferedPrinter implements Runnable {
         }
     }
 
+
+
     private int getMessageCounter() {
         synchronized (lock) {
             return messages.size();
@@ -43,11 +50,11 @@ public class BufferedPrinter implements Runnable {
     @Override
     public void run() {
 
-        out.printf("%10s: %15s%n", "n-th prime", "primes in queue");
+        out.printf("%12s: %25s%n", "n-th prime", "primes in output-queue");
 
         PrimeMessage message;
         int numberInQueue;
-        while(true) {
+        for(long lineCounter = 1; ; lineCounter++) {
             if(Thread.currentThread().isInterrupted()) {
                 return;
             }
@@ -69,14 +76,19 @@ public class BufferedPrinter implements Runnable {
                 numberInQueue = this.getMessageCounter();
             }
 
-            if(lineCounter % 1_000 == 0) {
-                out.printf("\r%10d: %15d: %s", lineCounter, numberInQueue, message.toString());
+            if(message.getMessageType() == PrimeMessage.MessageType.EXIT) {
+                Thread.currentThread().interrupt();
+            } else {
+                if(!skipPrint || lineCounter % 1_000 == 0) {
+                    out.printf("\r%10d: %15d: %s", lineCounter, numberInQueue, message.toString());
+                    out.flush();
+                }
+
+                if(lineCounter % 100_000 == 0) {
+                    out.printf("%n");
+                }
             }
 
-            if(lineCounter % 100_000 == 0) {
-                out.printf("%n");
-            }
-            lineCounter++;
         }
     }
 }

@@ -1,6 +1,8 @@
 package at.ezylot.primelister.primechecker;
 
 import at.ezylot.primelister.WorkSheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.math.BigInteger;
 
@@ -10,8 +12,7 @@ public class BigIntegerPrimeChecker implements PrimeChecker {
     private static final BigInteger TWO = BigInteger.valueOf(2);
     private static final BigInteger THREE = BigInteger.valueOf(3);
 
-
-
+    @Autowired
     public BigIntegerPrimeChecker(WorkSheduler sheduler) {
         this.sheduler = sheduler;
     }
@@ -27,6 +28,9 @@ public class BigIntegerPrimeChecker implements PrimeChecker {
             }
 
             number = sheduler.getNumberToWorkOn();
+            if(number.equals(BigInteger.valueOf(-1))) {
+                return;
+            }
 
             squareRoot = sqrt(number);
             found = false;
@@ -50,7 +54,8 @@ public class BigIntegerPrimeChecker implements PrimeChecker {
         }
     }
 
-    private BigInteger sqrt(BigInteger n) {
+    @Cacheable("squareroots")
+    public BigInteger sqrt(BigInteger n) {
         BigInteger a = BigInteger.ONE;
         BigInteger b = n.shiftRight(5).add(BigInteger.valueOf(8));
         while (b.compareTo(a) >= 0) {

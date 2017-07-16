@@ -1,8 +1,31 @@
 package at.ezylot.primelister;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
 public class Application {
+
+    private static Logger logger = LogManager.getLogger();
+    @Autowired WorkSheduler workSheduler;
+
     public static void main(String[] args) throws InterruptedException {
-        WorkSheduler sheduler = new WorkSheduler(4);
-        sheduler.startBlocking();
+        ApplicationContext context = new SpringApplicationBuilder()
+                .sources(Application.class)
+                .bannerMode(Banner.Mode.OFF)
+            .run();
+
+        context.getBean(Application.class).start();
     }
+
+    public void start() throws InterruptedException {
+        logger.info("Starting search for primes.");
+        workSheduler.startBlocking();
+    }
+
 }

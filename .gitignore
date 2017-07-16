@@ -11,3 +11,4 @@ tmp/
 *.iml
 *.ipr
 *.iws
+log/ 

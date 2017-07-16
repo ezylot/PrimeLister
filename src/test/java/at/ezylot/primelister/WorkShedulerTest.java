@@ -17,8 +17,8 @@ public class WorkShedulerTest {
 
     @Test
     public void onlyOddNumbers() {
-
-        Assert.assertEquals(1, sheduler.getAmountOfWorkers());
+        Assert.assertEquals(1, sheduler.getThreadCount());
+        Assert.assertEquals(0, sheduler.getPrimes().size());
 
         BigInteger two = BigInteger.valueOf(2);
         Assert.assertTrue(sheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
