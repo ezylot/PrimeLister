@@ -12,7 +12,8 @@ import org.springframework.context.ApplicationContext;
 public class Application {
 
     private static Logger logger = LogManager.getLogger();
-    @Autowired WorkSheduler workSheduler;
+    @Autowired
+    WorkScheduler workScheduler;
 
     public static void main(String[] args) throws InterruptedException {
         ApplicationContext context = new SpringApplicationBuilder()
@@ -25,7 +26,7 @@ public class Application {
 
     public void start() throws InterruptedException {
         logger.info("Starting search for primes.");
-        workSheduler.startBlocking();
+        workScheduler.startBlocking();
     }
 
 }

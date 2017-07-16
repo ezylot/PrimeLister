@@ -1,7 +1,7 @@
 package at.ezylot.primelister.primechecker;
 
 
-import at.ezylot.primelister.WorkSheduler;
+import at.ezylot.primelister.WorkScheduler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -12,12 +12,12 @@ import static org.mockito.Mockito.*;
 
 public class PrimeCheckerTest {
 
-    private WorkSheduler sheduler;
+    private WorkScheduler scheduler;
 
     @Before
     public void setup() {
-        sheduler = mock(WorkSheduler.class);
-        when(sheduler.getNumberToWorkOn())
+        scheduler = mock(WorkScheduler.class);
+        when(scheduler.getNumberToWorkOn())
             .thenReturn(
                 BigInteger.valueOf(3),
                 BigInteger.valueOf(4),
@@ -34,28 +34,28 @@ public class PrimeCheckerTest {
 
     @Test
     public void checkLongPrimes() {
-        InOrder order = inOrder(sheduler);
+        InOrder order = inOrder(scheduler);
 
-        LongPrimeChecker checker = new LongPrimeChecker(this.sheduler);
+        LongPrimeChecker checker = new LongPrimeChecker(this.scheduler);
         checker.run();
 
-        order.verify(sheduler).isPrime(BigInteger.valueOf(3));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(5));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(7));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(11));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(3));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(5));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(7));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(11));
     }
 
     @Test
     public void checkBigIntegerPrimes() {
-        InOrder order = inOrder(sheduler);
+        InOrder order = inOrder(scheduler);
 
-        BigIntegerPrimeChecker checker = new BigIntegerPrimeChecker(this.sheduler);
+        BigIntegerPrimeChecker checker = new BigIntegerPrimeChecker(this.scheduler);
         checker.run();
 
-        order.verify(sheduler).isPrime(BigInteger.valueOf(3));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(5));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(7));
-        order.verify(sheduler).isPrime(BigInteger.valueOf(11));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(3));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(5));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(7));
+        order.verify(scheduler).isPrime(BigInteger.valueOf(11));
     }
 
 }

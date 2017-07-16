@@ -3,6 +3,8 @@ package at.ezylot.primelister;
 import at.ezylot.primelister.primechecker.LongPrimeChecker;
 import at.ezylot.primelister.primechecker.PrimeChecker;
 import com.google.common.base.MoreObjects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
@@ -14,7 +16,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class WorkSheduler {
+public class WorkScheduler {
+
+    private static final Logger logger = LogManager.getLogger(WorkScheduler.class.getName());
 
     private long startTime = 0;
     private Integer threads = null;
@@ -25,7 +29,7 @@ public class WorkSheduler {
     private Set<BigInteger> primes = new HashSet<>();
     private BigInteger lastChecked = BigInteger.valueOf(3);
 
-    public WorkSheduler(int threads) {
+    public WorkScheduler(int threads) {
         this.threads = threads;
     }
 
@@ -37,6 +41,7 @@ public class WorkSheduler {
 
     public void startBlocking() throws InterruptedException {
         int thr = MoreObjects.firstNonNull(this.threads, Runtime.getRuntime().availableProcessors());
+        logger.info("Starting the search with {} threads", thr);
         ExecutorService workerExecutor = Executors.newFixedThreadPool(thr);
 
         for (int i = 0; i < thr; i++) {
@@ -58,11 +63,17 @@ public class WorkSheduler {
 
 
     public synchronized void isPrime(BigInteger prime) {
+        assert prime.signum() == 1;
+        assert !prime.mod(BigInteger.valueOf(2)).equals(BigInteger.ZERO);
+
+        logger.trace("Found a new prime: {}", prime.toString());
+
         primes.add(prime);
 
         long milliseconds = System.currentTimeMillis() - startTime + 1;
         assert milliseconds > 0;
 
+        logger.trace("Sending this prime to the buffered printer");
         bufferedPrinter.addMessage(new PrimeMessage(
             prime.toString(),
             primes.size(),

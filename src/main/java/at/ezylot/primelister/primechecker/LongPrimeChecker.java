@@ -1,15 +1,15 @@
 package at.ezylot.primelister.primechecker;
 
-import at.ezylot.primelister.WorkSheduler;
+import at.ezylot.primelister.WorkScheduler;
 
 import java.math.BigInteger;
 
 public class LongPrimeChecker implements PrimeChecker {
 
-    private final WorkSheduler sheduler;
+    private final WorkScheduler scheduler;
 
-    public LongPrimeChecker(WorkSheduler sheduler) {
-        this.sheduler = sheduler;
+    public LongPrimeChecker(WorkScheduler scheduler) {
+        this.scheduler = scheduler;
     }
 
     private boolean checkPrime(long number) {
@@ -36,12 +36,12 @@ public class LongPrimeChecker implements PrimeChecker {
                 return;
             }
 
-            long number = sheduler.getNumberToWorkOn().longValue();
+            long number = scheduler.getNumberToWorkOn().longValue();
             if(number == -1) {
                 return;
             }
             if(checkPrime(number)) {
-                sheduler.isPrime(BigInteger.valueOf(number));
+                scheduler.isPrime(BigInteger.valueOf(number));
             }
         }
     }

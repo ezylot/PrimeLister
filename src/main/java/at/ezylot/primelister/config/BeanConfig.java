@@ -1,7 +1,7 @@
 package at.ezylot.primelister.config;
 
 import at.ezylot.primelister.BufferedPrinter;
-import at.ezylot.primelister.WorkSheduler;
+import at.ezylot.primelister.WorkScheduler;
 import com.google.common.collect.ImmutableList;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.guava.GuavaCacheManager;
@@ -18,8 +18,8 @@ public class BeanConfig {
 
 
     @Bean
-    public WorkSheduler workShedulerDevelopment() {
-        return new WorkSheduler(Runtime.getRuntime().availableProcessors());
+    public WorkScheduler workSchedulerDevelopment() {
+        return new WorkScheduler(Runtime.getRuntime().availableProcessors());
     }
 
     @Bean
