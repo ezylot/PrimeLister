@@ -1,10 +1,13 @@
 package at.ezylot.primelister;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigInteger;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class WorkSchedulerTest {
 
@@ -21,11 +24,11 @@ public class WorkSchedulerTest {
         Assert.assertEquals(0, scheduler.getPrimes().size());
 
         BigInteger two = BigInteger.valueOf(2);
-        Assert.assertTrue(scheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
-        Assert.assertTrue(scheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
-        Assert.assertTrue(scheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
-        Assert.assertTrue(scheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
-        Assert.assertTrue(scheduler.getNumberToWorkOn().mod(two).equals(BigInteger.ONE));
+        assertThat(scheduler.getNumberToWorkOn().mod(two)).isEqualTo(BigInteger.ONE);
+        assertThat(scheduler.getNumberToWorkOn().mod(two)).isEqualTo(BigInteger.ONE);
+        assertThat(scheduler.getNumberToWorkOn().mod(two)).isEqualTo(BigInteger.ONE);
+        assertThat(scheduler.getNumberToWorkOn().mod(two)).isEqualTo(BigInteger.ONE);
+        assertThat(scheduler.getNumberToWorkOn().mod(two)).isEqualTo(BigInteger.ONE);
     }
 
 }

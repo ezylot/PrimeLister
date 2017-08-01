@@ -1,9 +1,12 @@
 package at.ezylot.primelister;
 
-import org.junit.Assert;
+import org.assertj.core.api.Assert;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.Locale;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class PrimeMessageTest {
 
@@ -21,23 +24,21 @@ public class PrimeMessageTest {
         PrimeMessage exitMessage = new PrimeMessage(null, 0, 0);
 
 
-        Assert.assertEquals(PrimeMessage.MessageType.MESSAGE, message1.getMessageType());
-        Assert.assertEquals(PrimeMessage.MessageType.MESSAGE, message2.getMessageType());
-        Assert.assertEquals(PrimeMessage.MessageType.MESSAGE, message3.getMessageType());
-        Assert.assertEquals(PrimeMessage.MessageType.MESSAGE, message4.getMessageType());
-        Assert.assertEquals(PrimeMessage.MessageType.MESSAGE, message5.getMessageType());
+        assertThat(message1.getMessageType()).isEqualTo(PrimeMessage.MessageType.MESSAGE);
+        assertThat(message2.getMessageType()).isEqualTo(PrimeMessage.MessageType.MESSAGE);
+        assertThat(message3.getMessageType()).isEqualTo(PrimeMessage.MessageType.MESSAGE);
+        assertThat(message4.getMessageType()).isEqualTo(PrimeMessage.MessageType.MESSAGE);
+        assertThat(message5.getMessageType()).isEqualTo(PrimeMessage.MessageType.MESSAGE);
 
-        Assert.assertEquals(PrimeMessage.MessageType.EXIT, exitMessage.getMessageType());
+        assertThat(exitMessage.getMessageType()).isEqualTo(PrimeMessage.MessageType.EXIT);
 
 
+        assertThat( message1.toString()).isEqualTo(String.format(Locale.ENGLISH, basestring, "1", 0, 0, 1, 1.0));
+        assertThat( message2.toString()).isEqualTo(String.format(Locale.ENGLISH, basestring, "2", 0, 0, 2, 0.5));
+        assertThat( message3.toString()).isEqualTo(String.format(Locale.ENGLISH, basestring, "3", 0, 0, 0, 1000.0));
+        assertThat( message4.toString()).isEqualTo(String.format(Locale.ENGLISH, basestring, "4", 0, 0, 1, 10.0));
+        assertThat( message5.toString()).isEqualTo(String.format(Locale.ENGLISH, basestring, "5", 277, 46, 40, 1.0));
 
-        Assert.assertEquals(String.format(Locale.ENGLISH, basestring, "1", 0, 0, 1, 1.0), message1.toString());
-        Assert.assertEquals(String.format(Locale.ENGLISH, basestring, "2", 0, 0, 2, 0.5), message2.toString());
-        Assert.assertEquals(String.format(Locale.ENGLISH, basestring, "3", 0, 0, 0, 1000.0), message3.toString());
-        Assert.assertEquals(String.format(Locale.ENGLISH, basestring, "4", 0, 0, 1, 10.0), message4.toString());
-        Assert.assertEquals(String.format(Locale.ENGLISH, basestring, "5", 277, 46, 40, 1.0), message5.toString());
-
-        Assert.assertEquals("EXIT", exitMessage.toString());
+        assertThat(exitMessage.toString()).isEqualTo("EXIT");
     }
-
 }

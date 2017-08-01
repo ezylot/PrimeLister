@@ -3,8 +3,8 @@ package at.ezylot.primelister;
 import at.ezylot.primelister.primechecker.LongPrimeChecker;
 import at.ezylot.primelister.primechecker.PrimeChecker;
 import com.google.common.base.MoreObjects;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WorkScheduler {
 
-    private static final Logger logger = LogManager.getLogger(WorkScheduler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(WorkScheduler.class.getName());
 
     private long startTime = 0;
     private Integer threads = null;

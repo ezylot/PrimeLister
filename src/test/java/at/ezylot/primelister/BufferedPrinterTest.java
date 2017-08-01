@@ -1,6 +1,5 @@
 package at.ezylot.primelister;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +7,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 
 public class BufferedPrinterTest {
 
@@ -39,22 +42,22 @@ public class BufferedPrinterTest {
         service.submit(bufferedPrinter);
         service.shutdown();
         if(!service.awaitTermination(10, TimeUnit.SECONDS)) {
-            Assert.fail("Buffered Printer did not stop on exit signal");
+            fail("Buffered Printer did not stop on exit signal");
         }
 
         String output = new String(byteOutputStream.toByteArray());
         String[] lines = output.split("\r");
 
-        Assert.assertEquals(5, lines.length);
+        assertThat(lines.length).isEqualTo(5);
 
-        Assert.assertTrue(lines[2], lines[2].trim().startsWith("1:"));
-        Assert.assertTrue(lines[2], lines[2].contains("last prime found after:  0h  0m  0s WITH a pps of 1000.0"));
+        assertThat(lines[2].trim()).startsWith("1:");
+        assertThat(lines[2]).contains("last prime found after:  0h  0m  0s WITH a pps of 1000.0");
 
-        Assert.assertTrue(lines[3], lines[3].trim().startsWith("2:"));
-        Assert.assertTrue(lines[3], lines[3].contains("last prime found after:  0h  0m  1s WITH a pps of 2.0"));
+        assertThat(lines[3].trim()).startsWith("2:");
+        assertThat(lines[3]).contains("last prime found after:  0h  0m  1s WITH a pps of 2.0");
 
-        Assert.assertTrue(lines[4], lines[4].trim().startsWith("3:"));
-        Assert.assertTrue(lines[4], lines[4].contains("last prime found after:  0h  0m  2s WITH a pps of 2.0"));
+        assertThat(lines[4].trim()).startsWith("3:");
+        assertThat(lines[4]).contains("last prime found after:  0h  0m  2s WITH a pps of 2.0");
     }
 
 }

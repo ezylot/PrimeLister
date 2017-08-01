@@ -46,6 +46,21 @@ public class PrimeCheckerTest {
     }
 
     @Test
+    public void checkLongNonPrimers() {
+        InOrder order = inOrder(scheduler);
+
+        LongPrimeChecker checker = new LongPrimeChecker(this.scheduler);
+        checker.run();
+
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(-1));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(10));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(9));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(8));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(6));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(4));
+    }
+
+    @Test
     public void checkBigIntegerPrimes() {
         InOrder order = inOrder(scheduler);
 
@@ -56,6 +71,28 @@ public class PrimeCheckerTest {
         order.verify(scheduler).isPrime(BigInteger.valueOf(5));
         order.verify(scheduler).isPrime(BigInteger.valueOf(7));
         order.verify(scheduler).isPrime(BigInteger.valueOf(11));
+
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(-1));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(10));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(9));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(8));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(6));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(4));
+    }
+
+    @Test
+    public void checkBigIntegerNonPrimers() {
+        InOrder order = inOrder(scheduler);
+
+        BigIntegerPrimeChecker checker = new BigIntegerPrimeChecker(this.scheduler);
+        checker.run();
+
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(-1));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(10));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(9));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(8));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(6));
+        order.verify(scheduler, never()).isPrime(BigInteger.valueOf(4));
     }
 
 }
